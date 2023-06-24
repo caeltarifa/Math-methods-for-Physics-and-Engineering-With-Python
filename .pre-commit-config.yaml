@@ -1,0 +1,80 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-json
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/myint/autoflake
+    rev: v2.0.1
+    hooks:
+      - id: autoflake
+        args:
+          - --in-place
+          - --ignore-init-module-imports
+          - --remove-all-unused-imports
+          - --expand-star-imports
+          - --remove-duplicate-keys
+          - --remove-unused-variables
+          - --verbose
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+
+  - repo: https://github.com/psf/black
+    rev: 23.1.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args:
+          - --ignore=E203,W503
+          - --max-line-length=79
+          - --max-doc-length=72
+
+  - repo: https://github.com/PyCQA/pylint
+    rev: v2.16.2
+    hooks:
+      - id: pylint
+        files: ".ipynb"
+        additional_dependencies:
+          - nbformat
+          - pyyaml
+        args:
+          - --disable=broad-except
+          - --disable=line-too-long
+          - --disable=too-many-instance-attributes
+          - --disable=too-many-nested-blocks
+          - --disable=too-many-public-methods
+          - --disable=too-many-statements
+          - --disable=unused-argument
+          - --disable=unused-variable
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.0.1
+    hooks:
+      - id: mypy
+        args:
+          - --ignore-missing-imports
+        additional_dependencies:
+          - types-dateparser
+          - types-requests
+          - types-six
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.6.2
+    hooks:
+      - id: prettier
+        types_or: [javascript, jsx, ts, tsx, html, yaml]
+
+  - repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
