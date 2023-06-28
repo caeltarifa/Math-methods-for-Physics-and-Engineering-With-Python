@@ -4,7 +4,8 @@ FROM jupyter/scipy-notebook:latest
 RUN pip install numpy scipy scikit-learn matplotlib
 
 # Install nbextensions for LaTeX support
-RUN jupyter contrib nbextension install --system
+RUN pip install jupyter_contrib_nbextensions
+RUN jupyter contrib nbextension install --user
 RUN jupyter nbextension enable equation-numbering/main
 RUN jupyter nbextension enable latex_envs/latex_envs
 
