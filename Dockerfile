@@ -9,8 +9,13 @@ RUN jupyter contrib nbextension install --user
 RUN jupyter nbextension enable equation-numbering/main
 RUN jupyter nbextension enable latex_envs/latex_envs
 
+USER jovyan
+
 # Copy Jupyter notebooks to the container
-COPY . /math-algorithms
+#COPY . /home/jovyan/work/notebooks
+
+# Set out the directory where we work on
+#WORKDIR /home/jovyan/work/notebooks
 
 # Specify the default command to start Jupyter
 CMD ["start-notebook.sh", "--NotebookApp.token=''"]
