@@ -5,6 +5,11 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8888:8888"
+      #- "8888:8888"
+      - target: 8888
+        published: 8888
     volumes:
-      - ./:/home/jovyan/work:rwx
+      - type: bind
+        source: ./notebooks
+        target: /home/jovyan/work/notebooks
+    #command: start-notebook.sh --NotebookApp.notebook_dir=/home/jovyan/work/notebooks

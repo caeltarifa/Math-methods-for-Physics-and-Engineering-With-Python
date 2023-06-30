@@ -12,7 +12,7 @@ RUN jupyter nbextension enable latex_envs/latex_envs
 USER jovyan
 
 # Copy Jupyter notebooks to the container
-#COPY . /home/jovyan/work/notebooks
+COPY . /home/jovyan/work/notebooks
 
 # Set out the directory where we work on
 #WORKDIR /home/jovyan/work/notebooks
