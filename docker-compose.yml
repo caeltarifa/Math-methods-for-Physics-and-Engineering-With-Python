@@ -1,15 +1,16 @@
-version: "1.0.0"
+version: "3"
+
 services:
-  jupyter:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  notebook:
+    image: continuumio/miniconda3:latest
     ports:
-      #- "8888:8888"
-      - target: 8888
-        published: 8888
+      - 8888:8888
     volumes:
-      - type: bind
-        source: ./notebooks
-        target: /home/jovyan/work/notebooks
-    #command: start-notebook.sh --NotebookApp.notebook_dir=/home/jovyan/work/notebooks
+      - ./:/home/jovyan/notebooks
+    command: bash -c "conda install -c conda-forge jupyterlab && jupyter lab --ip=0.0.0.0 --allow-root --NotebookApp.token=''"
+
+    # Install LaTeX support packages
+    environment:
+      - NB_USER=jovyan
+      - NB_UID=1000
+      - NB_GID=100
