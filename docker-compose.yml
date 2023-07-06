@@ -12,8 +12,8 @@ services:
       - NB_UID=1000
       - NB_GID=100
     command: >
-      bash -c "conda create -n myenv python=3.11 && \
-      conda activate myenv && \
+      bash -c "conda create -n myenv2 python=3.11 && \
+      conda activate myenv2 && \
       conda install -c conda-forge jupyterlab && \
       conda install -c conda-forge mathjax && \
       jupyter labextension install @jupyterlab/latex && \
