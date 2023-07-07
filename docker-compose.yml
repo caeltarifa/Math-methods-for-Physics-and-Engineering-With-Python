@@ -1,8 +1,10 @@
-version: "3"
+version: "1"
 
 services:
   notebook:
-    image: continuumio/miniconda3:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 8888:8888
     volumes:
@@ -11,12 +13,3 @@ services:
       - NB_USER=jovyan
       - NB_UID=1000
       - NB_GID=100
-    command: >
-      bash -c "conda create -n myenv2 python=3.11 && \
-      conda activate myenv2 && \
-      conda install -c conda-forge jupyterlab && \
-      conda install -c conda-forge mathjax && \
-      jupyter labextension install @jupyterlab/latex && \
-      jupyter labextension install @jupyterlab/latex-unicode && \
-      jupyter labextension install @jupyterlab/equation-numbering && \
-      jupyter lab --ip=0.0.0.0 --allow-root --NotebookApp.token=''"
