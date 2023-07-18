@@ -1,27 +1,44 @@
-FROM continuumio/miniconda3:latest
+# Use the Jupyter Minimal Notebook as the base image
+FROM jupyter/minimal-notebook:python-3.11
 
-# Set environment variables
-ENV NB_USER=jovyan
-ENV NB_UID=1000
-ENV NB_GID=100
-ENV CONDA_ENV=myenv
+# Install Jupyter Notebook and Python 3.11
+RUN conda update -n base -c defaults conda
+RUN conda clean -a --yes
+RUN conda update --all
+RUN conda install -y -c conda-forge jupyter python=3.11.0
 
-# Create user and user's home directory
-RUN useradd --uid $NB_UID --gid $NB_GID --shell /bin/bash --create-home $NB_USER
-RUN usermod -a -G $NB_GID $NB_USER
+# Install the R runtime environment
+RUN conda install -y -c conda-forge r-base
+# Install additional R packages as needed
+RUN conda install -y -c conda-forge r-ggplot2 r-dplyr
 
-# Install LaTeX, Jupyter Notebook, and other dependencies
-RUN apt-get update && apt-get install -y texlive texlive-latex-extra pandoc && \
-  conda create -y -n $CONDA_ENV python=3.11 jupyterlab && \
-  echo "source activate $CONDA_ENV" >> /home/$NB_USER/.bashrc && \
-  /bin/bash -c "source /home/$NB_USER/.bashrc && \
-  conda install -y -c conda-forge mathjax nbconvert==6.4.0"
+# Install additional LaTeX packages for equation numbering and English language support
+USER root
+RUN apt-get update && apt-get install -y \
+  texlive \
+  texlive-fonts-recommended \
+  texlive-latex-recommended \
+  texlive-lang-english \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
-WORKDIR /home/$NB_USER/notebooks
+# Set the working directory to /home/jovyan/work
+#WORKDIR /home/jovyan/work
 
-# Expose the Jupyter Notebook port
+
+# Change ownership of the /home/jovyan/work directory to the jovyan user
+RUN chown -R jovyan:users /home/jovyan/work
+
+# Set permissions for the /home/jovyan/work directory
+RUN chmod -R 777 /home/jovyan/work
+
+# Switch back to the jovyan user
+USER jovyan
+
+
+
+# Expose Jupyter Notebook port
 EXPOSE 8888
 
-# Set the default command to start JupyterLab
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
+# Start Jupyter Notebook
+CMD ["start-notebook.sh"]

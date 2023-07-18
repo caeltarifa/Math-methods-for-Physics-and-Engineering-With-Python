@@ -1,15 +1,13 @@
-version: "1"
-
+version: "3"
 services:
-  notebook:
+  jupyter:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: jupyter_notebook # Assign a custom name to the container
+    image: jupyter_env
+    command: start-notebook.sh --NotebookApp.token=''
     ports:
-      - 8888:8888
+      - "8888:8888" # Map Jupyter Notebook port from container to host
     volumes:
-      - ./:/home/jovyan/notebooks
-    environment:
-      - NB_USER=jovyan
-      - NB_UID=1000
-      - NB_GID=100
+      - ../:/home/jovyan/work # Map local "notebooks" directory to Jupyter workspace
