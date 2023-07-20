@@ -1,6 +1,19 @@
 # Use the Jupyter Minimal Notebook as the base image
 FROM jupyter/minimal-notebook:python-3.11
 
+# Install bash completion feature
+RUN apt-get update && apt-get install -y bash-completion
+
+# Copy the requirements.txt file into the container
+COPY requirements.txt .
+
+# Install pip3.11
+RUN python3.11 -m ensurepip --default-pip
+RUN python3.11 -m pip install --no-cache-dir --upgrade pip
+
+# Install the Python dependencies from requirements.txt
+RUN pip3.11 install --no-cache-dir -r requirements.txt
+
 # Install Jupyter Notebook and Python 3.11
 RUN conda update -n base -c defaults conda
 RUN conda clean -a --yes
@@ -25,7 +38,6 @@ RUN apt-get update && apt-get install -y \
 # Set the working directory to /home/jovyan/work
 #WORKDIR /home/jovyan/work
 
-
 # Change ownership of the /home/jovyan/work directory to the jovyan user
 RUN chown -R jovyan:users /home/jovyan/work
 
@@ -34,8 +46,6 @@ RUN chmod -R 777 /home/jovyan/work
 
 # Switch back to the jovyan user
 USER jovyan
-
-
 
 # Expose Jupyter Notebook port
 EXPOSE 8888
