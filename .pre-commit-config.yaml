@@ -2,11 +2,21 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
+      - id: check-yaml
       - id: check-json
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+      - id: end-of-file-fixer
+      - id: requirements-txt-fixer
       - id: debug-statements
       - id: detect-private-key
-      - id: end-of-file-fixer
-      - id: trailing-whitespace
+      - id: pretty-format-json
+        args: ["--autofix"]
 
   - repo: https://github.com/myint/autoflake
     rev: v2.0.1
@@ -78,3 +88,43 @@ repos:
     rev: 6.3.0
     hooks:
       - id: pydocstyle
+
+  # Jupyter Notebook checks
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 0.7.0
+    hooks:
+      - id: nbqa-black
+        additional_dependencies: [black==20.8b1]
+        args: [--nbqa-mutate]
+      - id: nbqa-flake8
+        additional_dependencies: [flake8]
+        args: [--nbqa-mutate]
+      - id: nbqa-isort
+        additional_dependencies: [isort==5.7.0]
+        args: [--nbqa-mutate]
+
+  # Latex checks
+  - repo: https://github.com/jonasbb/pre-commit-latex-hooks
+    rev: v1.4.0
+    hooks:
+      - id: american-eg-ie
+      - id: cleveref-capitalization
+      - id: consistent-spelling
+        args:
+          [
+            "--emph=et al.",
+            "--emph=a priori",
+            "--emph=a posteriori",
+            '--regex=naive=\bna(i|\\"i)ve',
+          ]
+      - id: csquotes
+      - id: ensure-labels-for-sections
+      - id: no-space-in-cite
+      - id: tilde-cite
+      - id: unique-labels
+        # args:
+        #     [
+        #       # If present only check that there is a \label{} but not the value
+        #       "--ignore-label-content",
+        #     ]
+      - id: cleveref-instead-of-autoref
