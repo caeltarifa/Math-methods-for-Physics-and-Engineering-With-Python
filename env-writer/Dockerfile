@@ -1,6 +1,9 @@
 # Use the Jupyter Minimal Notebook as the base image
 FROM jupyter/minimal-notebook:python-3.11
 
+# Install bash completion feature
+RUN apt-get update && apt-get install -y bash-completion
+
 # Copy the requirements.txt file into the container
 COPY requirements.txt .
 
